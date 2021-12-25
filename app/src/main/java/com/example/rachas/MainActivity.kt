@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(),OnClickElement {
     override fun onPause() {
         super.onPause()
         guardar()
+
     }
 
     private fun initComponents() {
@@ -52,6 +53,14 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         setAdaptador()
     }
 
+    override fun onTopResumedActivityChanged(isTopResumedActivity: Boolean) {
+        super.onTopResumedActivityChanged(isTopResumedActivity)
+        if(isTopResumedActivity) {
+            getPreferencias()
+            setAdaptador()
+        }
+    }
+
     public fun nuevoElemento(elemento:Elemento){
         elementos.add(elemento)
         Log.i("info","elementos $elementos")
@@ -60,9 +69,8 @@ class MainActivity : AppCompatActivity(),OnClickElement {
     }
 
     override fun click(posicion: Int) {
-        val intent = Intent(this,VerElemento::class.java).apply{
-            putExtra("cual",posicion)
-        }
+        val intent = Intent(this,VerElemento::class.java)
+        putSharedPreference(posicion, elementos[posicion].contador, elementos[posicion].nombre)
         startActivity(intent)
     }
 
@@ -73,5 +81,28 @@ class MainActivity : AppCompatActivity(),OnClickElement {
 
     private fun guardar(){
         serializador.guardar(elementos)
+    }
+
+    private fun putSharedPreference(posicion:Int,racha:Int,nombre:String){
+        val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
+        val editor = preferencias.edit()
+        editor.putInt("posicion",posicion)
+        editor.putInt("racha",racha)
+        editor.putString("nombre",nombre)
+
+        editor.commit()
+    }
+
+    private fun getPreferencias(){
+        val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
+
+        if(preferencias.getBoolean("segunda",false)) {
+
+            Log.i("info","""mainactivity ${preferencias.getInt("posicion", -1)}""")
+            elementos[preferencias.getInt("posicion", -1)].contador = preferencias.getInt("racha", -1)
+        }
+
+        val editor = preferencias.edit()
+        editor.putBoolean("segunda",false)
     }
 }

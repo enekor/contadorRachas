@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView
         holder.contador.text = elementosList.get(position).contador.toString()
         holder.nombre.text = elementosList.get(position).nombre
         holder.imagen.visibility = View.GONE
-        holder.layout.setBackgroundColor(Color.BLUE)
     }
 
     override fun getItemCount(): Int {
