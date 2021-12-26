@@ -1,5 +1,6 @@
 package com.example.rachas
 
+import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,9 +11,10 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 
- class Adaptador(elementos:List<Elemento>,onCLick:OnClickElement): RecyclerView.Adapter<Adaptador.ViewHolder>() {
+ class Adaptador(elementos:List<Elemento>,onCLick:OnClickElement, context: Context): RecyclerView.Adapter<Adaptador.ViewHolder>() {
      val elementosList = elementos
      val elementClick = onCLick
+     val contexto = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view:View = LayoutInflater.from(parent.context).inflate(R.layout.preview,parent,false)
@@ -22,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.contador.text = elementosList.get(position).contador.toString()
         holder.nombre.text = elementosList.get(position).nombre
-        holder.imagen.visibility = View.GONE
+        holder.imagen.setImageURI(ImageController.getImagen(contexto, elementosList[position].imagen))
     }
 
     override fun getItemCount(): Int {

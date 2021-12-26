@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.rachas">
-
+          xmlns:tools="http://schemas.android.com/tools" package="com.example.rachas">
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -19,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".VerElemento"/>
+        <activity android:name=".NuevoElemento"/>
     </application>
 
 </manifest>

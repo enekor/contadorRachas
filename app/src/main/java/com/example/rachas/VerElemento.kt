@@ -1,5 +1,6 @@
 package com.example.rachas
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -39,8 +40,9 @@ class VerElemento(): AppCompatActivity() {
         actual = findViewById<TextView>(R.id.countEdit)
         getPreferencias()
 
+        imagen.setImageURI(ImageController.getImagen(this,elemento.imagen))
         nombre.text = elemento.nombre
-        actual.text = "Cantidad actual -> ${elemento.contador}"
+        actual.text = "${elemento.contador}"
 
         onClick()
 
@@ -74,7 +76,7 @@ class VerElemento(): AppCompatActivity() {
             elemento.contador -= computo
         }
 
-        actual.text = "Cantidad actual -> ${elemento.contador}"
+        actual.text = "${elemento.contador}"
         putSharedPreference(elemento.contador)
     }
 
@@ -88,10 +90,14 @@ class VerElemento(): AppCompatActivity() {
 
     private fun getPreferencias(){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
-        var nombre = preferencias.getString("nombre","algo")
+        val posicion = preferencias.getInt("posicion",-1)
+        val racha = preferencias.getInt("racha",0)
+        val nombre = preferencias.getString("nombre","algo")
+        val imagen = preferencias.getString("verImagen","")
 
-        Log.i("info","""vernota ${preferencias.getInt("posicion", -1)}""")
-        elemento = nombre?.let { Elemento(it,-1,preferencias.getInt("racha",0)) }!!
-
+        if (nombre!=null && imagen!=null){
+            elemento = Elemento(nombre,imagen,racha)
+        }
+        this.posicion = posicion
     }
 }

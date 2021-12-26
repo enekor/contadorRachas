@@ -29,6 +29,24 @@ class Serializador(context:Context,archivo:String) {
         writer.flush()
         writer.close()
     }
+
+    public fun leerId():ArrayList<String>{
+        try{
+            val out = InputStreamReader(contexto.openFileInput(nombre))
+            val reader = BufferedReader(out)
+            val type = object : TypeToken<ArrayList<String>>() {}.type
+            return gson.fromJson<ArrayList<String>>(reader,type) ?: ArrayList<String>()
+        }catch (e:Exception){
+            return ArrayList<String>()
+        }
+    }
+
+    public fun guardarId(ids:ArrayList<String>){
+        val writer = OutputStreamWriter(contexto.openFileOutput(nombre,Context.MODE_PRIVATE))
+        writer.write(gson.toJson(ids))
+        writer.flush()
+        writer.close()
+    }
 }
 
 

@@ -14,8 +14,15 @@ class MainActivity : AppCompatActivity(),OnClickElement {
 
     lateinit var recicler:RecyclerView
     var elementos = ArrayList<Elemento>()
-    var adaptador = Adaptador(elementos,this)
+    var adaptador = Adaptador(elementos,this,this)
     val serializador = Serializador(this,"elementos.json")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        initComponents()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_activity_menu,menu)
@@ -24,17 +31,10 @@ class MainActivity : AppCompatActivity(),OnClickElement {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId==R.id.nuevo){
-            val nuevoElemento = NuevoElemento(this)
-            nuevoElemento.show(supportFragmentManager,null)
+            val intent = Intent(this,NuevoElemento::class.java)
+            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        initComponents()
     }
 
     override fun onPause() {
@@ -53,16 +53,8 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         setAdaptador()
     }
 
-    override fun onTopResumedActivityChanged(isTopResumedActivity: Boolean) {
-        super.onTopResumedActivityChanged(isTopResumedActivity)
-        if(isTopResumedActivity) {
-            getPreferencias()
-            setAdaptador()
-        }
-    }
-
-    public fun nuevoElemento(elemento:Elemento){
-        elementos.add(elemento)
+    public fun nuevoElemento(nombre:String,imagen:String){
+        elementos.add(Elemento(nombre,imagen,0))
         Log.i("info","elementos $elementos")
         setAdaptador()
         guardar()
@@ -70,12 +62,12 @@ class MainActivity : AppCompatActivity(),OnClickElement {
 
     override fun click(posicion: Int) {
         val intent = Intent(this,VerElemento::class.java)
-        putSharedPreference(posicion, elementos[posicion].contador, elementos[posicion].nombre)
+        putSharedPreference(posicion, elementos[posicion].contador, elementos[posicion].nombre,elementos[posicion].imagen)
         startActivity(intent)
     }
 
     private fun setAdaptador() {
-        adaptador = Adaptador(elementos,this)
+        adaptador = Adaptador(elementos,this,this)
         recicler.adapter = adaptador
     }
 
@@ -83,26 +75,53 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         serializador.guardar(elementos)
     }
 
-    private fun putSharedPreference(posicion:Int,racha:Int,nombre:String){
+    private fun putSharedPreference(posicion:Int,racha:Int,nombre:String,imagen: String){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
         val editor = preferencias.edit()
         editor.putInt("posicion",posicion)
         editor.putInt("racha",racha)
         editor.putString("nombre",nombre)
+        editor.putString("verImagen",imagen)
 
-        editor.commit()
+        editor.apply()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        getPreferencias()
+        setAdaptador()
     }
 
     private fun getPreferencias(){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
+        Log.i("info","""nuevo ${preferencias.getBoolean("nuevo",false)}""")
+        Log.i("info","""segunda ${preferencias.getBoolean("segunda", false)}""")
 
-        if(preferencias.getBoolean("segunda",false)) {
+        when {
+            preferencias.getBoolean("segunda", false)-> {
 
-            Log.i("info","""mainactivity ${preferencias.getInt("posicion", -1)}""")
-            elementos[preferencias.getInt("posicion", -1)].contador = preferencias.getInt("racha", -1)
+                elementos[preferencias.getInt("posicion", -1)].contador = preferencias.getInt("racha", -1)
+                val editor = preferencias.edit()
+                editor.putBoolean("segunda", false)
+                editor.apply()
+            }
+
+                preferencias.getBoolean("nuevo", false) -> {
+
+                    Log.i("info","entro a nuevo")
+                    val imagen = preferencias.getString("imagen","null")
+                    val nombre = preferencias.getString("nuevoNombre","null")
+
+                    if (nombre != null && imagen != null) {
+                        nuevoElemento(nombre,imagen)
+                    }
+
+                    val editor = preferencias.edit()
+                    editor.putBoolean("nuevo", false)
+                    editor.apply()
+            }
         }
 
-        val editor = preferencias.edit()
-        editor.putBoolean("segunda",false)
     }
 }
