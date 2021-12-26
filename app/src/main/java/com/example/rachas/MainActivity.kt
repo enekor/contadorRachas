@@ -66,6 +66,10 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         startActivity(intent)
     }
 
+    override fun onLongClick(posicion: Int) {
+        elementos.removeAt(posicion)
+    }
+
     private fun setAdaptador() {
         adaptador = Adaptador(elementos,this,this)
         recicler.adapter = adaptador

@@ -7,8 +7,8 @@
                                                    android:padding="20sp">
 
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" tools:srcCompat="@tools:sample/avatars" android:id="@+id/imagenPreview"
+            android:layout_width="100dp"
+            android:layout_height="100dp" tools:srcCompat="@tools:sample/avatars" android:id="@+id/imagenPreview"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="10dp" app:layout_constraintBottom_toBottomOf="parent"/>
     <TextView
@@ -26,4 +26,8 @@
             app:layout_constraintStart_toEndOf="@+id/imagenPreview"
             android:textSize="10sp" android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="25dp"/>
+    <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp" app:srcCompat="@drawable/delete" android:id="@+id/borrar"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

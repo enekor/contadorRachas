@@ -37,18 +37,22 @@ import androidx.recyclerview.widget.RecyclerView
         val nombre:TextView
         val contador:TextView
         val layout:ConstraintLayout
+        val borrar:ImageView
 
         init {
             imagen = itemView.findViewById<ImageView>(R.id.imagenPreview)
             nombre = itemView.findViewById<TextView>(R.id.nombrePreview)
             contador = itemView.findViewById<TextView>(R.id.contadorPreview)
             layout = itemView.findViewById<ConstraintLayout>(R.id.layout)
+            borrar = itemView.findViewById<ImageView>(R.id.borrar)
 
-            layout.setOnClickListener(View.OnClickListener { view ->
-                Log.i("info","clicado")
-                val position = adapterPosition
-                elementClick.click(position)
-            })
+            layout.setOnClickListener {
+                elementClick.click(adapterPosition)
+            }
+
+            borrar.setOnClickListener{
+                elementClick.onLongClick(adapterPosition)
+            }
         }
     }
 }
