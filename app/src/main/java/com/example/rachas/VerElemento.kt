@@ -52,8 +52,10 @@ class VerElemento(): AppCompatActivity() {
      * onCLick listeners
      */
     private fun onClick() {
-        mas.setOnClickListener(View.OnClickListener { view -> calcular(true) })
-        menos.setOnClickListener(View.OnClickListener { view -> calcular(false) })
+        mas.setOnClickListener{
+            calcular(true)
+        }
+        menos.setOnClickListener{ calcular(false) }
     }
 
     /**

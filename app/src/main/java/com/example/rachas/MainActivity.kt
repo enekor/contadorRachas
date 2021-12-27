@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity(),OnClickElement {
 
     override fun onLongClick(posicion: Int) {
         elementos.removeAt(posicion)
+        setAdaptador()
     }
 
     private fun setAdaptador() {

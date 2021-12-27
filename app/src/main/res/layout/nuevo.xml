@@ -25,10 +25,14 @@
             android:textAlignment="center" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
             android:minHeight="48dp"/>
+
     <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp" app:srcCompat="@drawable/ic_launcher_foreground"
-            android:id="@+id/seleccionarImagen"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nombre" android:layout_marginTop="100dp"/>
+        android:id="@+id/seleccionarImagen"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toTopOf="@+id/ok"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nombre"
+        app:srcCompat="@drawable/default_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>
