@@ -17,6 +17,9 @@ class MainActivity : AppCompatActivity(),OnClickElement {
     var adaptador = Adaptador(elementos,this,this)
     val serializador = Serializador(this,"elementos.json")
 
+    /**
+     * metodo ejecutado al iniciar le programa
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -24,11 +27,17 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         initComponents()
     }
 
+    /**
+     * inflar el menu de la actividad
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_activity_menu,menu)
         return super.onCreateOptionsMenu(menu)
     }
 
+    /**
+     * ejecutado cunado se interactua con una opcion del menu, si es el boton $nuevo llama a la actividad de creacion de un nuevo $Elemento
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId==R.id.nuevo){
             val intent = Intent(this,NuevoElemento::class.java)
@@ -37,12 +46,47 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * cuando se pausa la aplicacion se guarda automaticamente
+     */
     override fun onPause() {
         super.onPause()
         guardar()
 
     }
 
+    /**
+     * cuando se vuelve a la actividad recibe los datos compartidos por la otra actividad y setea el adaptador con la nueva informacion
+     */
+    override fun onResume() {
+        super.onResume()
+
+        getPreferencias()
+        setAdaptador()
+    }
+
+    /**
+     * cuando es llamado llama a la actividad de mostrar elemento
+     * @property posicion posicion del elemento seleccionado del que sacaremos la informacion a pasar a la nueva actividad para que la muestre
+     */
+    override fun click(posicion: Int) {
+        val intent = Intent(this,VerElemento::class.java)
+        putSharedPreference(posicion, elementos[posicion].contador, elementos[posicion].nombre,elementos[posicion].imagen)
+        startActivity(intent)
+    }
+
+    /**
+     * borra el elemento de la lista
+     * @property posicion la posicion del elemento a borrar de la lista
+     */
+    override fun onLongClick(posicion: Int) {
+        elementos.removeAt(posicion)
+        setAdaptador()
+    }
+
+    /**
+     * inicializacion de los componentes que usaremos en el programa
+     */
     private fun initComponents() {
 
         recicler = findViewById<RecyclerView>(R.id.lista)
@@ -53,6 +97,11 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         setAdaptador()
     }
 
+    /**
+     * creacion de un nuevo elemento y adicion de este en la lista de elementos
+     * @property nombre el nombre del elemento a crear
+     * @property id de la imagen asociada al elemento
+     */
     public fun nuevoElemento(nombre:String,imagen:String){
         elementos.add(Elemento(nombre,imagen,0))
         Log.i("info","elementos $elementos")
@@ -60,26 +109,28 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         guardar()
     }
 
-    override fun click(posicion: Int) {
-        val intent = Intent(this,VerElemento::class.java)
-        putSharedPreference(posicion, elementos[posicion].contador, elementos[posicion].nombre,elementos[posicion].imagen)
-        startActivity(intent)
-    }
-
-    override fun onLongClick(posicion: Int) {
-        elementos.removeAt(posicion)
-        setAdaptador()
-    }
-
+    /**
+     * seteamos el adaptador al RecyclerView para que lo muestre actualizado
+     */
     private fun setAdaptador() {
         adaptador = Adaptador(elementos,this,this)
         recicler.adapter = adaptador
     }
 
+    /**
+     * guardamos la lista de elementos actualizada en el json
+     */
     private fun guardar(){
         serializador.guardar(elementos)
     }
 
+    /**
+     * pasamos a las shared preferences la informacion del elemento a mostrar en la actividad
+     * @property posicion la posicion asociada a ese elemento
+     * @property racha la racha acumulada por dicho elemento
+     * @property nombre nombre del elemento
+     * @param imagen id de la imagen asociada al elemento
+     */
     private fun putSharedPreference(posicion:Int,racha:Int,nombre:String,imagen: String){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
         val editor = preferencias.edit()
@@ -91,13 +142,14 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         editor.apply()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        getPreferencias()
-        setAdaptador()
-    }
-
+    /**
+     * recive desde las SharedPreferences los nuevos datos dependiendo del booleano activo en estas, si esta activo
+     * "segunda" sifnifica que la segunda actividad, aka la actividad de visualizacion, nos ha devuelto nueva informacion
+     * "nuevo" significa que la actividad de creacion de nuevo elemento nos paso por parametro los datos del nuevo elemento
+     *
+     * en ambos casos se setea a false el booleano una vez se han recogido y usado apropiadamente, para asi evitar
+     * que se usen en momentos inadecuados y cree conflictos no deseados
+     */
     private fun getPreferencias(){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
         Log.i("info","""nuevo ${preferencias.getBoolean("nuevo",false)}""")
@@ -112,19 +164,19 @@ class MainActivity : AppCompatActivity(),OnClickElement {
                 editor.apply()
             }
 
-                preferencias.getBoolean("nuevo", false) -> {
+            preferencias.getBoolean("nuevo", false) -> {
 
-                    Log.i("info","entro a nuevo")
-                    val imagen = preferencias.getString("imagen","null")
-                    val nombre = preferencias.getString("nuevoNombre","null")
+                Log.i("info","entro a nuevo")
+                val imagen = preferencias.getString("imagen","null")
+                val nombre = preferencias.getString("nuevoNombre","null")
 
-                    if (nombre != null && imagen != null) {
-                        nuevoElemento(nombre,imagen)
-                    }
+                if (nombre != null && imagen != null) {
+                    nuevoElemento(nombre,imagen)
+                }
 
-                    val editor = preferencias.edit()
-                    editor.putBoolean("nuevo", false)
-                    editor.apply()
+                val editor = preferencias.edit()
+                editor.putBoolean("nuevo", false)
+                editor.apply()
             }
         }
 

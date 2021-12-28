@@ -10,6 +10,10 @@ object IdGenerator {
     )
     var generatedIds = ArrayList<String>()
 
+    /**
+     * generador de Ids aleatorias de longitud $MAX_LENGTH
+     * @return la id generada
+     */
     public fun generarId():String{
         var returner = ""
 

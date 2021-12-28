@@ -12,6 +12,10 @@ class Serializador(context:Context,archivo:String) {
     val contexto = context
     val nombre = archivo
 
+    /**
+     * lee el json con los datos almacenados
+     * @return una arraylist de elementos con los datos almacenados o na arraylist vacia si da problemas porque no existe el archivo de almaceaje de datos
+     */
     public fun leer():ArrayList<Elemento>{
         try{
             val out = InputStreamReader(contexto.openFileInput(nombre))
@@ -23,6 +27,10 @@ class Serializador(context:Context,archivo:String) {
         }
     }
 
+    /**
+     * guarda la arraylist de elementos en el json
+     * @property lista la lista de elementos que vamos a guardar
+     */
     public fun guardar(lista:ArrayList<Elemento>){
         val writer = OutputStreamWriter(contexto.openFileOutput(nombre,Context.MODE_PRIVATE))
         writer.write(gson.toJson(lista))
@@ -30,6 +38,10 @@ class Serializador(context:Context,archivo:String) {
         writer.close()
     }
 
+    /**
+     * lee el json con las id almacenadas
+     * @return una arraylist de ids o una vacia en el caso de no existencia del archivo
+     */
     public fun leerId():ArrayList<String>{
         try{
             val out = InputStreamReader(contexto.openFileInput(nombre))
@@ -41,6 +53,10 @@ class Serializador(context:Context,archivo:String) {
         }
     }
 
+    /**
+     * guarda la arraylist de ids
+     * @property lista la lista de ids a guardar
+     */
     public fun guardarId(ids:ArrayList<String>){
         val writer = OutputStreamWriter(contexto.openFileOutput(nombre,Context.MODE_PRIVATE))
         writer.write(gson.toJson(ids))

@@ -29,7 +29,7 @@ class VerElemento(): AppCompatActivity() {
     }
 
     /**
-     * component initialice
+     * inicializacion de los componentes
      */
     private fun initComponents() {
         imagen = findViewById<ImageView>(R.id.imagenEdit)
@@ -49,7 +49,7 @@ class VerElemento(): AppCompatActivity() {
     }
 
     /**
-     * onCLick listeners
+     * adicion de los OnClick a los elementos que lo usaran
      */
     private fun onClick() {
         mas.setOnClickListener{
@@ -59,14 +59,15 @@ class VerElemento(): AppCompatActivity() {
     }
 
     /**
-     * change multiplier
+     * cambia el numero operador
      */
     private fun editMultiplier(){
         computo = multiplicador.text.toString().toInt()
     }
 
     /**
-     * add or substract
+     * suma o resta el nuemro operador dependiendo de si se quiere sumar o restar
+     * @property suma si es true se espera una suma y si es false se espera una resta
      */
     private fun calcular(suma:Boolean){
         //Log.i("info","""a ${multiplicador.text.equals("")}""")
@@ -82,6 +83,10 @@ class VerElemento(): AppCompatActivity() {
         putSharedPreference(elemento.contador)
     }
 
+    /**
+     * guarda en las SharedPreferences los datos a recibir en el MainActivity
+     * @property racha la racha modificada a guardar
+     */
     private fun putSharedPreference(racha:Int){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
         val editor = preferencias.edit()
@@ -90,6 +95,9 @@ class VerElemento(): AppCompatActivity() {
         editor.commit()
     }
 
+    /**
+     * recojemos los datos desde las SharedPrefrences y creamos un elemento sobre el que actuaremos durante el proceso de esta actividad
+     */
     private fun getPreferencias(){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
         val posicion = preferencias.getInt("posicion",-1)
