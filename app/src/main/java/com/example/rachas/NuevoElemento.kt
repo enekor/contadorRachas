@@ -24,6 +24,7 @@ class NuevoElemento():AppCompatActivity() {
     private lateinit var ok:Button
     private lateinit var nombre:TextView
     private lateinit var imagen:ImageView
+    private var imagenCambiada = false
 
     /**
      * ejecutado al iniciar la actividad
@@ -44,8 +45,13 @@ class NuevoElemento():AppCompatActivity() {
         imagen = findViewById<ImageView>(R.id.seleccionarImagen)
 
         ok.setOnClickListener{
-            crearElemento()
-            startActivity(Intent(this,MainActivity::class.java))
+            if(!nombre.text.isEmpty()){
+                crearElemento()
+                finish()
+            }
+            else{
+                Toast.makeText(this, "No se puede crear un elemento sin nombre", Toast.LENGTH_SHORT).show()
+            }
         }
 
         imagen.setOnClickListener{
@@ -63,6 +69,7 @@ class NuevoElemento():AppCompatActivity() {
             requestCode == SELECT_ACTIVITY && resultCode == Activity.RESULT_OK ->{
                 imageUri = data!!.data
                 imagen.setImageURI(imageUri)
+                imagenCambiada = true
             }
         }
     }
@@ -73,14 +80,19 @@ class NuevoElemento():AppCompatActivity() {
     private fun crearElemento(){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
         val editor = preferencias.edit()
-        val idImagen = generarId()
+        var idImagen = "null"
+
+        if(imagenCambiada){
+            idImagen = generarId()
+            imageUri?.let { ImageController.guardarImagen(this,idImagen, it) }
+        }
 
         editor.putBoolean("nuevo",true)
         editor.putString("nuevoNombre",nombre.text.toString())
         editor.putString("imagen",idImagen)
         editor.apply()
 
-        imageUri?.let { ImageController.guardarImagen(this,idImagen, it) }
+
     }
 
     /**

@@ -38,21 +38,32 @@ import androidx.recyclerview.widget.RecyclerView
         val contador:TextView
         val layout:ConstraintLayout
         val borrar:ImageView
+        val mas:ImageView
+        val menos:ImageView
 
+        /**
+         * inicializacion de componentes a usar
+         */
         init {
             imagen = itemView.findViewById<ImageView>(R.id.imagenPreview)
             nombre = itemView.findViewById<TextView>(R.id.nombrePreview)
             contador = itemView.findViewById<TextView>(R.id.contadorPreview)
             layout = itemView.findViewById<ConstraintLayout>(R.id.layout)
             borrar = itemView.findViewById<ImageView>(R.id.borrar)
+            mas = itemView.findViewById<ImageView>(R.id.sumaPreview)
+            menos = itemView.findViewById<ImageView>(R.id.restaPreview)
 
-            layout.setOnClickListener {
-                elementClick.click(adapterPosition)
-            }
+            onClick()
+        }
 
-            borrar.setOnClickListener{
-                elementClick.onLongClick(adapterPosition)
-            }
+        /**
+         * creacion de eventos onCLick
+         */
+        private fun onClick() {
+            layout.setOnClickListener { elementClick.click(adapterPosition,Codigos.CLICK) }
+            borrar.setOnClickListener{ elementClick.click(adapterPosition,Codigos.BORRAR) }
+            mas.setOnClickListener{elementClick.click(adapterPosition,Codigos.MAS)}
+            menos.setOnClickListener{elementClick.click(adapterPosition,Codigos.MENOS)}
         }
     }
 }

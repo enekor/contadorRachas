@@ -43,6 +43,6 @@ object ImageController {
         if(id!="null"){
             return Uri.fromFile(file)
         }
-        return Uri.parse("android.resource://com.example.rachas/drawable/ic_launcher_foreground")
+        return Uri.parse("android.resource://com.example.rachas/drawable/default_image")
     }
 }

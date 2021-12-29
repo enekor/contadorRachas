@@ -52,9 +52,7 @@ class VerElemento(): AppCompatActivity() {
      * adicion de los OnClick a los elementos que lo usaran
      */
     private fun onClick() {
-        mas.setOnClickListener{
-            calcular(true)
-        }
+        mas.setOnClickListener{ calcular(true) }
         menos.setOnClickListener{ calcular(false) }
     }
 

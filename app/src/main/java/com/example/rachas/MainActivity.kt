@@ -69,19 +69,31 @@ class MainActivity : AppCompatActivity(),OnClickElement {
      * cuando es llamado llama a la actividad de mostrar elemento
      * @property posicion posicion del elemento seleccionado del que sacaremos la informacion a pasar a la nueva actividad para que la muestre
      */
-    override fun click(posicion: Int) {
-        val intent = Intent(this,VerElemento::class.java)
-        putSharedPreference(posicion, elementos[posicion].contador, elementos[posicion].nombre,elementos[posicion].imagen)
-        startActivity(intent)
-    }
-
-    /**
-     * borra el elemento de la lista
-     * @property posicion la posicion del elemento a borrar de la lista
-     */
-    override fun onLongClick(posicion: Int) {
-        elementos.removeAt(posicion)
-        setAdaptador()
+    override fun click(posicion: Int,codigo:Int) {
+        when {
+            codigo == Codigos.CLICK -> {
+                val intent = Intent(this, VerElemento::class.java)
+                putSharedPreference(
+                    posicion,
+                    elementos[posicion].contador,
+                    elementos[posicion].nombre,
+                    elementos[posicion].imagen
+                )
+                startActivity(intent)
+            }
+           codigo == Codigos.MAS -> {
+               elementos[posicion].contador++
+                setAdaptador()
+           }
+            codigo == Codigos.MENOS -> {
+                elementos[posicion].contador--
+                setAdaptador()
+            }
+            codigo == Codigos.BORRAR -> {
+                elementos.removeAt(posicion)
+                setAdaptador()
+            }
+        }
     }
 
     /**
