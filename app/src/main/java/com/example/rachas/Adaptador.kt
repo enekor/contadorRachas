@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 
- class Adaptador(elementos:List<Elemento>,onCLick:OnClickElement, context: Context): RecyclerView.Adapter<Adaptador.ViewHolder>() {
+ class Adaptador(elementos:ArrayList<Elemento>,onCLick:OnClickElement, context: Context): RecyclerView.Adapter<Adaptador.ViewHolder>() {
      val elementosList = elementos
      val elementClick = onCLick
      val contexto = context
@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.RecyclerView
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.contador.text = elementosList.get(position).contador.toString()
-        holder.nombre.text = elementosList.get(position).nombre
+        holder.contador.text = elementosList[position].contador.toString()
+        holder.nombre.text = elementosList[position].nombre
         holder.imagen.setImageURI(ImageController.getImagen(contexto, elementosList[position].imagen))
     }
 

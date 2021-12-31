@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity(),OnClickElement {
     lateinit var recicler:RecyclerView
     var elementos = ArrayList<Elemento>()
     var adaptador = Adaptador(elementos,this,this)
-    val serializador = Serializador(this,"elementos.json")
 
     /**
      * metodo ejecutado al iniciar le programa
@@ -39,9 +38,15 @@ class MainActivity : AppCompatActivity(),OnClickElement {
      * ejecutado cunado se interactua con una opcion del menu, si es el boton $nuevo llama a la actividad de creacion de un nuevo $Elemento
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId==R.id.nuevo){
-            val intent = Intent(this,NuevoElemento::class.java)
-            startActivity(intent)
+        when {
+            item.itemId == R.id.nuevo -> {
+                val intent = Intent(this, NuevoElemento::class.java)
+                startActivity(intent)
+            }
+            item.itemId == R.id.filtro -> {
+                orderLayout()
+                setAdaptador()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -100,11 +105,13 @@ class MainActivity : AppCompatActivity(),OnClickElement {
      * inicializacion de los componentes que usaremos en el programa
      */
     private fun initComponents() {
+        val serializador = Serializador(this)
+        elementos = serializador.leer("elementos.json")
 
-        recicler = findViewById<RecyclerView>(R.id.lista)
+        recicler = findViewById(R.id.lista)
         val manager = LinearLayoutManager(this)
         recicler.layoutManager = manager
-        elementos = serializador.leer()
+
 
         setAdaptador()
     }
@@ -133,7 +140,8 @@ class MainActivity : AppCompatActivity(),OnClickElement {
      * guardamos la lista de elementos actualizada en el json
      */
     private fun guardar(){
-        serializador.guardar(elementos)
+        val serializador = Serializador(this)
+        serializador.guardar(elementos,"elementos.json")
     }
 
     /**
@@ -191,6 +199,23 @@ class MainActivity : AppCompatActivity(),OnClickElement {
                 editor.apply()
             }
         }
+    }
 
+    private fun orderLayout(){
+        val filtro = FilterType()
+        filtro.show(supportFragmentManager,"filtro")
+        setAdaptador()
+    }
+
+    public fun order(boolean: Boolean){
+        orderList(boolean)
+    }
+
+    private fun orderList(ascendente:Boolean){
+        elementos = if(ascendente) {
+            ListActions.orderAscendente(elementos)
+        }else {
+            ListActions.orderDescendente(elementos)
+        }
     }
 }

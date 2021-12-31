@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:title="filter" android:icon="@drawable/filter" android:id="@+id/filtro" app:showAsAction="ifRoom"/>
     <item android:title="Item" app:showAsAction="ifRoom" android:icon="@drawable/ic_baseline_add_24"
           android:id="@+id/nuevo"/>
+
 </menu>

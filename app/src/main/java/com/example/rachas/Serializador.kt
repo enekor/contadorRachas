@@ -7,32 +7,31 @@ import java.io.*
 import java.lang.Exception
 import java.lang.reflect.Type
 
-class Serializador(context:Context,archivo:String) {
+class Serializador(context:Context) {
     val gson = Gson()
     val contexto = context
-    val nombre = archivo
 
     /**
      * lee el json con los datos almacenados
-     * @return una arraylist de elementos con los datos almacenados o na arraylist vacia si da problemas porque no existe el archivo de almaceaje de datos
+     * @return una arraylist de Ts con los datos almacenados o una arraylist vacia si da problemas porque no existe el archivo de almacenaje de datos
      */
-    public fun leer():ArrayList<Elemento>{
-        try{
-            val out = InputStreamReader(contexto.openFileInput(nombre))
+    public fun leer(archivo:String):ArrayList<Elemento>{
+        return try{
+            val out = InputStreamReader(contexto.openFileInput(archivo))
             val reader = BufferedReader(out)
             val type = object : TypeToken<ArrayList<Elemento>>() {}.type
-            return gson.fromJson<ArrayList<Elemento>>(reader,type) ?: ArrayList<Elemento>()
+            gson.fromJson(reader,type)
         }catch (e:Exception){
-            return ArrayList<Elemento>()
+            ArrayList<Elemento>()
         }
     }
 
     /**
-     * guarda la arraylist de elementos en el json
-     * @property lista la lista de elementos que vamos a guardar
+     * guarda la arraylist de Ts en el json
+     * @property lista la lista de Ts que vamos a guardar
      */
-    public fun guardar(lista:ArrayList<Elemento>){
-        val writer = OutputStreamWriter(contexto.openFileOutput(nombre,Context.MODE_PRIVATE))
+    public fun guardar(lista:ArrayList<Elemento>,archivo: String){
+        val writer = OutputStreamWriter(contexto.openFileOutput(archivo,Context.MODE_PRIVATE))
         writer.write(gson.toJson(lista))
         writer.flush()
         writer.close()
@@ -42,7 +41,7 @@ class Serializador(context:Context,archivo:String) {
      * lee el json con las id almacenadas
      * @return una arraylist de ids o una vacia en el caso de no existencia del archivo
      */
-    public fun leerId():ArrayList<String>{
+    public fun leerId(nombre:String):ArrayList<String>{
         try{
             val out = InputStreamReader(contexto.openFileInput(nombre))
             val reader = BufferedReader(out)
@@ -57,7 +56,7 @@ class Serializador(context:Context,archivo:String) {
      * guarda la arraylist de ids
      * @property lista la lista de ids a guardar
      */
-    public fun guardarId(ids:ArrayList<String>){
+    public fun guardarId(ids:ArrayList<String>,nombre:String){
         val writer = OutputStreamWriter(contexto.openFileOutput(nombre,Context.MODE_PRIVATE))
         writer.write(gson.toJson(ids))
         writer.flush()

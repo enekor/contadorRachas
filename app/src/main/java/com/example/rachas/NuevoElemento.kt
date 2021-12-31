@@ -115,8 +115,8 @@ class NuevoElemento():AppCompatActivity() {
      * @return si existe o no la id
      */
     private fun checkIdNotexists(id:String):Boolean{
-        val serializador = Serializador(this,"ids.json")
-        return serializador.leerId().contains(id)
+        val serializador = Serializador(this)
+        return serializador.leerId("ids.json").contains(id)
     }
 
     /**
@@ -124,9 +124,9 @@ class NuevoElemento():AppCompatActivity() {
      * @property id a guardar
      */
     private fun guardarId(id:String){
-        val serializador = Serializador(this,"ids.json")
-        val ids = serializador.leerId()
+        val serializador = Serializador(this)
+        val ids = serializador.leerId("ids.json")
         ids.add(id)
-        serializador.guardarId(ids)
+        serializador.guardarId(ids,"ids.json")
     }
 }
