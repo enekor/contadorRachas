@@ -23,7 +23,7 @@
             app:layout_constraintTop_toBottomOf="@+id/ascendenteArrow" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="25dp"/>
     <TextView
-            android:text="Ascendente"
+            android:text="Descendente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/descendente"
             app:layout_constraintTop_toBottomOf="@+id/ascendente"

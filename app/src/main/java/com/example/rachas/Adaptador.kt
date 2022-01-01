@@ -68,7 +68,12 @@ import androidx.recyclerview.widget.RecyclerView
                 Log.i("info","$numero")
                 elementClick.click(adapterPosition,Codigos.MAS)
             }
-            menos.setOnClickListener{elementClick.click(adapterPosition,Codigos.MENOS)}
+            menos.setOnClickListener{
+                val numero:Int = contador.text.toString().toInt() - 1
+                contador.text = numero.toString()
+                Log.i("info","$numero")
+                elementClick.click(adapterPosition,Codigos.MENOS)
+            }
         }
     }
 }
