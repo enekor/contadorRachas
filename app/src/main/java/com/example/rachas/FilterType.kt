@@ -46,11 +46,7 @@ class FilterType:DialogFragment() {
     }
 
     private fun orden(boolean:Boolean,main:MainActivity){
-        if(boolean){
-            main.order(true)
-        }else{
-            main.order(false)
-        }
+        main.order(boolean)
         dismiss()
     }
 }

@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity(),OnClickElement {
             }
             item.itemId == R.id.filtro -> {
                 orderLayout()
-                setAdaptador()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -88,11 +87,9 @@ class MainActivity : AppCompatActivity(),OnClickElement {
             }
            codigo == Codigos.MAS -> {
                elementos[posicion].contador++
-                setAdaptador()
            }
             codigo == Codigos.MENOS -> {
                 elementos[posicion].contador--
-                setAdaptador()
             }
             codigo == Codigos.BORRAR -> {
                 elementos.removeAt(posicion)
@@ -204,7 +201,6 @@ class MainActivity : AppCompatActivity(),OnClickElement {
     private fun orderLayout(){
         val filtro = FilterType()
         filtro.show(supportFragmentManager,"filtro")
-        setAdaptador()
     }
 
     public fun order(boolean: Boolean){
@@ -217,5 +213,7 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         }else {
             ListActions.orderDescendente(elementos)
         }
+        Log.i("info",elementos.toString())
+        setAdaptador()
     }
 }

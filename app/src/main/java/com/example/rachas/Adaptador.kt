@@ -62,7 +62,12 @@ import androidx.recyclerview.widget.RecyclerView
         private fun onClick() {
             layout.setOnClickListener { elementClick.click(adapterPosition,Codigos.CLICK) }
             borrar.setOnClickListener{ elementClick.click(adapterPosition,Codigos.BORRAR) }
-            mas.setOnClickListener{elementClick.click(adapterPosition,Codigos.MAS)}
+            mas.setOnClickListener{
+                val numero:Int = contador.text.toString().toInt() + 1
+                contador.text = numero.toString()
+                Log.i("info","$numero")
+                elementClick.click(adapterPosition,Codigos.MAS)
+            }
             menos.setOnClickListener{elementClick.click(adapterPosition,Codigos.MENOS)}
         }
     }
