@@ -1,21 +1,14 @@
 package com.example.rachas
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 
 class NuevoElemento():AppCompatActivity() {
 
@@ -116,7 +109,7 @@ class NuevoElemento():AppCompatActivity() {
      */
     private fun checkIdNotexists(id:String):Boolean{
         val serializador = Serializador(this)
-        return serializador.leerId("ids.json").contains(id)
+        return serializador.leer<String>("ids.json").contains(id)
     }
 
     /**
@@ -125,8 +118,8 @@ class NuevoElemento():AppCompatActivity() {
      */
     private fun guardarId(id:String){
         val serializador = Serializador(this)
-        val ids = serializador.leerId("ids.json")
+        val ids = serializador.leer<String>("ids.json")
         ids.add(id)
-        serializador.guardarId(ids,"ids.json")
+        serializador.guardar<String>(ids,"ids.json")
     }
 }

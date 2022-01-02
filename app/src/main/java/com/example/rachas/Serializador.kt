@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.*
 import java.lang.Exception
-import java.lang.reflect.Type
 
 class Serializador(context:Context) {
     val gson = Gson()
@@ -15,14 +14,14 @@ class Serializador(context:Context) {
      * lee el json con los datos almacenados
      * @return una arraylist de Ts con los datos almacenados o una arraylist vacia si da problemas porque no existe el archivo de almacenaje de datos
      */
-    public fun leer(archivo:String):ArrayList<Elemento>{
+    public inline fun<reified T> leer(archivo:String):ArrayList<T>{
         return try{
             val out = InputStreamReader(contexto.openFileInput(archivo))
             val reader = BufferedReader(out)
-            val type = object : TypeToken<ArrayList<Elemento>>() {}.type
+            val type = object : TypeToken<ArrayList<T>>(){}.type
             gson.fromJson(reader,type)
         }catch (e:Exception){
-            ArrayList<Elemento>()
+            ArrayList<T>()
         }
     }
 
@@ -30,13 +29,13 @@ class Serializador(context:Context) {
      * guarda la arraylist de Ts en el json
      * @property lista la lista de Ts que vamos a guardar
      */
-    public fun guardar(lista:ArrayList<Elemento>,archivo: String){
+    public inline fun<reified T> guardar(lista:ArrayList<T>,archivo: String){
         val writer = OutputStreamWriter(contexto.openFileOutput(archivo,Context.MODE_PRIVATE))
         writer.write(gson.toJson(lista))
         writer.flush()
         writer.close()
     }
-
+/*
     /**
      * lee el json con las id almacenadas
      * @return una arraylist de ids o una vacia en el caso de no existencia del archivo
@@ -62,6 +61,7 @@ class Serializador(context:Context) {
         writer.flush()
         writer.close()
     }
+    */
 }
 
 
