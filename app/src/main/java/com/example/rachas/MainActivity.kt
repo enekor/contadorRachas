@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity(),OnClickElement {
      */
     private fun initComponents() {
         val serializador = Serializador(this)
-        elementos = serializador.leer("elementos.json")
+        elementos = serializador.leer<Elemento>("elementos.json")
 
         recicler = findViewById(R.id.lista)
         val manager = LinearLayoutManager(this)
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(),OnClickElement {
      */
     private fun guardar(){
         val serializador = Serializador(this)
-        serializador.guardar(elementos,"elementos.json")
+        serializador.guardar<Elemento>(elementos,"elementos.json")
     }
 
     /**
