@@ -1,9 +1,6 @@
 package com.example.rachas
 
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -72,12 +69,12 @@ class VerElemento(): AppCompatActivity() {
         editMultiplier()
 
         if(suma) {
-            elemento.contador += computo
+            elemento.contador = (elemento.contador.toInt()+computo).toString()
         }else {
-            elemento.contador -= computo
+            elemento.contador = (elemento.contador.toInt()-computo).toString()
         }
 
-        actual.text = "${elemento.contador}"
+        actual.text = elemento.contador
         putSharedPreference(elemento.contador)
     }
 
@@ -85,10 +82,10 @@ class VerElemento(): AppCompatActivity() {
      * guarda en las SharedPreferences los datos a recibir en el MainActivity
      * @property racha la racha modificada a guardar
      */
-    private fun putSharedPreference(racha:Int){
+    private fun putSharedPreference(racha:String){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
         val editor = preferencias.edit()
-        editor.putInt("racha",racha)
+        editor.putString("racha",racha)
         editor.putBoolean("segunda",true)
         editor.commit()
     }
@@ -99,12 +96,12 @@ class VerElemento(): AppCompatActivity() {
     private fun getPreferencias(){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
         val posicion = preferencias.getInt("posicion",-1)
-        val racha = preferencias.getInt("racha",0)
+        val racha = preferencias.getString("racha","0")
         val nombre = preferencias.getString("nombre","algo")
         val imagen = preferencias.getString("verImagen","")
 
         if (nombre!=null && imagen!=null){
-            elemento = Elemento(nombre,imagen,racha)
+            elemento = racha?.let { Elemento(nombre,imagen, it) }!!
         }
         this.posicion = posicion
     }

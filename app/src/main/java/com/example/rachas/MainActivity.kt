@@ -85,12 +85,8 @@ class MainActivity : AppCompatActivity(),OnClickElement {
                 )
                 startActivity(intent)
             }
-           codigo == Codigos.MAS -> {
-               elementos[posicion].contador++
-           }
-            codigo == Codigos.MENOS -> {
-                elementos[posicion].contador--
-            }
+            codigo == Codigos.MAS -> { elementos[posicion].contador = (elementos[posicion].contador.toInt()+1).toString() }
+            codigo == Codigos.MENOS -> { elementos[posicion].contador = (elementos[posicion].contador.toInt()-1).toString() }
             codigo == Codigos.BORRAR -> {
                 elementos.removeAt(posicion)
                 setAdaptador()
@@ -118,8 +114,8 @@ class MainActivity : AppCompatActivity(),OnClickElement {
      * @property nombre el nombre del elemento a crear
      * @property id de la imagen asociada al elemento
      */
-    public fun nuevoElemento(nombre:String,imagen:String){
-        elementos.add(Elemento(nombre,imagen,0))
+    fun nuevoElemento(nombre:String,imagen:String){
+        elementos.add(Elemento(nombre,imagen,"0"))
         Log.i("info","elementos $elementos")
         setAdaptador()
         guardar()
@@ -148,11 +144,11 @@ class MainActivity : AppCompatActivity(),OnClickElement {
      * @property nombre nombre del elemento
      * @param imagen id de la imagen asociada al elemento
      */
-    private fun putSharedPreference(posicion:Int,racha:Int,nombre:String,imagen: String){
+    private fun putSharedPreference(posicion:Int,racha:String,nombre:String,imagen: String){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
         val editor = preferencias.edit()
         editor.putInt("posicion",posicion)
-        editor.putInt("racha",racha)
+        editor.putString("racha",racha)
         editor.putString("nombre",nombre)
         editor.putString("verImagen",imagen)
 
@@ -169,13 +165,13 @@ class MainActivity : AppCompatActivity(),OnClickElement {
      */
     private fun getPreferencias(){
         val preferencias = getSharedPreferences("preferencias", MODE_PRIVATE)
-        Log.i("info","""nuevo ${preferencias.getBoolean("nuevo",false)}""")
-        Log.i("info","""segunda ${preferencias.getBoolean("segunda", false)}""")
+        /*Log.i("info","""nuevo ${preferencias.getBoolean("nuevo",false)}""")
+        Log.i("info","""segunda ${preferencias.getBoolean("segunda", false)}""")*/
 
         when {
             preferencias.getBoolean("segunda", false)-> {
 
-                elementos[preferencias.getInt("posicion", -1)].contador = preferencias.getInt("racha", -1)
+                elementos[preferencias.getInt("posicion", -1)].contador = preferencias.getString("racha","").toString()
                 val editor = preferencias.edit()
                 editor.putBoolean("segunda", false)
                 editor.apply()
@@ -198,20 +194,31 @@ class MainActivity : AppCompatActivity(),OnClickElement {
         }
     }
 
+    /**
+     * infla el layout de que orden se quiere poner a la lista
+     */
     private fun orderLayout(){
         val filtro = FilterType()
         filtro.show(supportFragmentManager,"filtro")
     }
 
-    public fun order(boolean: Boolean){
+    /**
+     * llamada a orderList
+     * @property boolean si se quiere ascendente o descendente, true ascendente, false descendente
+     */
+    fun order(boolean: Boolean){
         orderList(boolean)
     }
 
+    /**
+     * ordena la lista dependiendo del parametro y setea el adaptador con la lista ordenada
+     * @property ascendente si se quiere ascendente o descendente, true ascendente, false descendente
+     */
     private fun orderList(ascendente:Boolean){
         elementos = if(ascendente) {
-            ListActions.orderAscendente(elementos)
-        }else {
-            ListActions.orderDescendente(elementos)
+            ListActions.ordenarLista(elementos,true)
+        } else{
+            ListActions.ordenarLista(elementos,false)
         }
         Log.i("info",elementos.toString())
         setAdaptador()
